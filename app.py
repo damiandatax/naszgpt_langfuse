@@ -6,7 +6,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from langfuse.decorators import observe
-from langfuse.openai import OpenAI
+import openai
 
 model_pricings = {
     "gpt-4o": {
@@ -29,7 +29,7 @@ PRICING = model_pricings[st.session_state["model"]]
 
 load_dotenv()
 
-openai_client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 #
 # CHATBOT
@@ -50,7 +50,7 @@ def chatbot_reply(user_prompt, memory):
     # dodaj wiadomość użytkownika
     messages.append({"role": "user", "content": user_prompt})
 
-    response = openai_client.chat.completions.create(
+    response = openai.ChatCompletion.create(
         model=st.session_state["model"],
         messages=messages
     )
